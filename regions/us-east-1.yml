@@ -1,8 +1,18 @@
 defaults:
   parameters:
+    AZ1: &AZ1 us-east-1a
+    AZ2: &AZ2 us-east-1b
+    AZ3: &AZ3 us-east-1c
+    AZs:
+      - *AZ1
+      - *AZ2
+      - *AZ3
     CidrBlock: '10.10'
     Datacenter: nva0
 
 stacks:
   - name: hipaa-vpc
     template_name: vpc
+
+  - name: hipaa-public-subnets
+    template_name: public-subnets

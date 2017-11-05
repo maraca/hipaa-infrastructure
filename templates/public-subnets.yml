@@ -1,0 +1,88 @@
+Description: >
+    Creates public subnets associated with
+    our previously created VPC
+
+Parameters:
+  AZ1:
+    Description:  Name of the AZ associated with the Public Subnet #1
+    Type: String
+  AZ2:
+    Description:  Name of the AZ associated with the Public Subnet #2
+    Type: String
+  AZ3:
+    Description:  Name of the AZ associated with the Public Subnet #3
+    Type: String
+  Datacenter:
+    Description: Naming convention of the datacenter
+    Type: String
+
+Resources:
+  # Creation of Subnets
+  PublicSubnetAZ1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId:
+        Fn::ImportValue: !Sub ${Datacenter}:VpcId
+      CidrBlock: !Join
+        - ""
+        - - Fn::ImportValue: !Sub ${Datacenter}:CidrBlock
+          - '.255.0/24'
+      AvailabilityZone: !Ref AZ1
+      MapPublicIpOnLaunch: true
+
+  PublicSubnetAZ2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId:
+        Fn::ImportValue: !Sub ${Datacenter}:VpcId
+      CidrBlock: !Join
+        - ""
+        - - Fn::ImportValue: !Sub ${Datacenter}:CidrBlock
+          - '.254.0/24'
+      AvailabilityZone: !Ref AZ2
+      MapPublicIpOnLaunch: true
+
+  PublicSubnetAZ3:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId:
+        Fn::ImportValue: !Sub ${Datacenter}:VpcId
+      CidrBlock: !Join
+        - ""
+        - - Fn::ImportValue: !Sub ${Datacenter}:CidrBlock
+          - '.253.0/24'
+      AvailabilityZone: !Ref AZ3
+      MapPublicIpOnLaunch: true
+
+Outputs:
+  AZ1:
+    Description: Name of AZ1
+    Value: !Ref AZ1
+    Export:
+      Name: !Sub "${Datacenter}:AZ1"
+  AZ2:
+    Description: Name of AZ2
+    Value: !Ref AZ2
+    Export:
+      Name: !Sub "${Datacenter}:AZ2"
+  AZ3:
+    Description: Name of AZ3
+    Value: !Ref AZ3
+    Export:
+      Name: !Sub "${Datacenter}:AZ3"
+  PublicSubnetAZ1:
+    Description: Reference to PublicSubnetAZ1
+    Value: !Ref PublicSubnetAZ1
+    Export:
+      Name: !Sub "${Datacenter}:PublicSubnetAZ1"
+  PublicSubnetAZ2:
+    Description: Reference to PublicSubnetAZ2
+    Value: !Ref PublicSubnetAZ2
+    Export:
+      Name: !Sub "${Datacenter}:PublicSubnetAZ2"
+  PublicSubnetAZ3:
+    Description: Reference to PublicSubnetAZ3
+    Value: !Ref PublicSubnetAZ3
+    Export:
+      Name: !Sub "${Datacenter}:PublicSubnetAZ3"
+
