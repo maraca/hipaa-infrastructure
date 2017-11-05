@@ -1,27 +1,61 @@
 defaults:
   parameters:
-    AZ1: &AZ1 us-east-1a
-    AZ2: &AZ2 us-east-1b
-    AZ3: &AZ3 us-east-1c
-    AZs:
-      - *AZ1
-      - *AZ2
-      - *AZ3
-    CidrBlock: '10.10'
+    CidrBlockPrefix: '10.10'
     Datacenter: nva0
 
 stacks:
   - name: hipaa-vpc
     template_name: vpc
 
-  - name: hipaa-public-subnets
-    template_name: public-subnets
+  # Public Subnets
+  - name: hipaa-public-subnet-az0
+    template_name: subnet
+    parameters:
+      AzId: '0'
+      SubnetPrivacy: Public
+
+  - name: hipaa-public-subnet-az1
+    template_name: subnet
+    parameters:
+      AzId: '1'
+      SubnetPrivacy: Public
+
+  - name: hipaa-public-subnet-az2
+    template_name: subnet
+    parameters:
+      AzId: '2'
+      SubnetPrivacy: Public
 
   - name: hipaa-public-subnets-networking
     template_name: public-subnets-networking
 
   - name: hipaa-public-subnets-acls
     template_name: public-subnets-acls
+
+  # Private Subnets
+  - name: hipaa-private-subnet-az0
+    template_name: subnet
+    parameters:
+      AzId: '0'
+      SubnetPrivacy: Private
+
+  - name: hipaa-private-subnet-az1
+    template_name: subnet
+    parameters:
+      AzId: '1'
+      SubnetPrivacy: Private
+
+  - name: hipaa-private-subnet-az2
+    template_name: subnet
+    parameters:
+      AzId: '2'
+      SubnetPrivacy: Private
+
+  # Communication from Private Subnets to the Internet
+  - name: hipaa-nat-az-0
+    template_name: nat
+    parameters:
+      SubnetId: '0'
 
   - name: hipaa-nat-az-1
     template_name: nat
@@ -32,8 +66,3 @@ stacks:
     template_name: nat
     parameters:
       SubnetId: '2'
-
-  - name: hipaa-nat-az-3
-    template_name: nat
-    parameters:
-      SubnetId: '3'

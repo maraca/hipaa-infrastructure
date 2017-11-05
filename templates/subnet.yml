@@ -1,0 +1,56 @@
+Description: >
+    Creates private subnets associated with
+    our previously created VPC
+
+Parameters:
+  AzId:
+    Description: Id of the AZ to use to create the subnet. See mappings below 
+    Type: String
+    AllowedValues: [ 0, 1, 2 ]
+  Datacenter:
+    Description: Naming convention of the datacenter
+    Type: String
+  SubnetPrivacy:
+    Description: Public or Private
+    Type: String
+    AllowedValues:
+      - Public
+      - Private
+
+Mappings:
+  SubnetCidrBlockMap:
+    Private:
+      '0': '0.0'
+      '1': '1.0'
+      '2': '2.0'
+    Public:
+      '0': '255.0'
+      '1': '254.0'
+      '2': '253.0'
+
+Conditions:
+  PublicSubnet: !Equals
+    - !Ref SubnetPrivacy
+    - Public
+
+Resources:
+  Subnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId:
+        Fn::ImportValue: !Sub ${Datacenter}:VpcId
+      CidrBlock: !Join
+        - ""
+        - - Fn::ImportValue: !Sub ${Datacenter}:CidrBlockPrefix
+          - '.'
+          - !FindInMap [SubnetCidrBlockMap, !Ref SubnetPrivacy, !Ref AzId]
+          - '/24'
+      AvailabilityZone: !Select [ !Ref AzId, !GetAZs '' ]
+      MapPublicIpOnLaunch: !If [ PublicSubnet, true, false ]
+
+Outputs:
+  SubnetAZ:
+    Description: Subnet created within Availability Zone
+    Value: !Ref Subnet
+    Export:
+      Name: !Sub "${Datacenter}:${SubnetPrivacy}SubnetAZ${AzId}"

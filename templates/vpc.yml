@@ -2,7 +2,7 @@ Description: >
   Creates an AWS VPC.
 
 Parameters:
-  CidrBlock:
+  CidrBlockPrefix:
     Description: CIDR block associated with the VPC
     Type: String
   Datacenter:
@@ -14,8 +14,8 @@ Resources:
     Type: AWS::EC2::VPC
     Properties:
       CidrBlock: !Sub
-        - '${Prefix}.0.0/16'
-        - { Prefix: !Ref CidrBlock }
+        - '${CidrBlockPrefix}.0.0/16'
+        - { CidrBlockPrefix: !Ref CidrBlockPrefix }
 
   # Creates an Internet Gateway
   InternetGateway:
@@ -46,11 +46,11 @@ Outputs:
     Value: !Ref VPC
     Export:
       Name: !Sub "${Datacenter}:VpcId"
-  CidrBlock:
-    Description: CIDR block associated with the VPC
-    Value: !Ref CidrBlock
+  CidrBlockPrefix:
+    Description: CIDR block prefix associated with the VPC
+    Value: !Ref CidrBlockPrefix
     Export:
-      Name: !Sub "${Datacenter}:CidrBlock"
+      Name: !Sub "${Datacenter}:CidrBlockPrefix"
   InternetGateway:
     Description: Internet Gateway Id
     Value: !Ref InternetGateway

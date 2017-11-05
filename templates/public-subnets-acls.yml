@@ -121,23 +121,23 @@ Resources:
         Code: -1
         Type: -1
 
-  PublicSubnetAclAssociationAZ1:
+  SubnetAclAssociationAZ0:
+    Type: AWS::EC2::SubnetNetworkAclAssociation
+    Properties:
+      SubnetId:
+        Fn::ImportValue: !Sub "${Datacenter}:PublicSubnetAZ0"
+      NetworkAclId: !Ref NetworkAcl
+
+  SubnetAclAssociationAZ1:
     Type: AWS::EC2::SubnetNetworkAclAssociation
     Properties:
       SubnetId:
         Fn::ImportValue: !Sub "${Datacenter}:PublicSubnetAZ1"
       NetworkAclId: !Ref NetworkAcl
 
-  PublicSubnetAclAssociationAZ2:
+  SubnetAclAssociationAZ2:
     Type: AWS::EC2::SubnetNetworkAclAssociation
     Properties:
       SubnetId:
         Fn::ImportValue: !Sub "${Datacenter}:PublicSubnetAZ2"
-      NetworkAclId: !Ref NetworkAcl
-
-  PublicSubnetAclAssociationAZ3:
-    Type: AWS::EC2::SubnetNetworkAclAssociation
-    Properties:
-      SubnetId:
-        Fn::ImportValue: !Sub "${Datacenter}:PublicSubnetAZ3"
       NetworkAclId: !Ref NetworkAcl

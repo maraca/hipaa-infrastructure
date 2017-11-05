@@ -8,6 +8,14 @@ Parameters:
 
 Resources:
   # Maps Route Table to all 3 public AZs
+  RouteTableAssociationAZ0:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId:
+        Fn::ImportValue: !Sub "${Datacenter}:PublicSubnetAZ0"
+      RouteTableId:
+        Fn::ImportValue: !Sub "${Datacenter}:PublicRouteTable"
+
   RouteTableAssociationAZ1:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
@@ -21,13 +29,5 @@ Resources:
     Properties:
       SubnetId:
         Fn::ImportValue: !Sub "${Datacenter}:PublicSubnetAZ2"
-      RouteTableId:
-        Fn::ImportValue: !Sub "${Datacenter}:PublicRouteTable"
-
-  RouteTableAssociationAZ3:
-    Type: AWS::EC2::SubnetRouteTableAssociation
-    Properties:
-      SubnetId:
-        Fn::ImportValue: !Sub "${Datacenter}:PublicSubnetAZ3"
       RouteTableId:
         Fn::ImportValue: !Sub "${Datacenter}:PublicRouteTable"

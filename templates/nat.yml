@@ -22,6 +22,19 @@ Resources:
       SubnetId:
         Fn::ImportValue: !Sub ${Datacenter}:PublicSubnetAZ${SubnetId}
 
+  RouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Fn::ImportValue: !Sub ${Datacenter}:VpcId
+
+  RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref RouteTable
+      SubnetId:
+        Fn::ImportValue: !Sub ${Datacenter}:PrivateSubnetAZ${SubnetId}
+
 Outputs:
   NATGatewayId:
     Description: Id of the NAT instance
