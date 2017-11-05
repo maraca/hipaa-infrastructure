@@ -85,4 +85,3 @@ Outputs:
     Value: !Ref PublicSubnetAZ3
     Export:
       Name: !Sub "${Datacenter}:PublicSubnetAZ3"
-

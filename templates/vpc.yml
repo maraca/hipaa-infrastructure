@@ -17,6 +17,29 @@ Resources:
         - '${Prefix}.0.0/16'
         - { Prefix: !Ref CidrBlock }
 
+  # Creates an Internet Gateway
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref InternetGateway
+
+  # Creates a Routing Table with a route out to the Internet
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+
+  PublicRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: '0.0.0.0/0'
+      GatewayId: !Ref InternetGateway
+
 Outputs:
   VpcId:
     Description: VPC Id
@@ -28,3 +51,13 @@ Outputs:
     Value: !Ref CidrBlock
     Export:
       Name: !Sub "${Datacenter}:CidrBlock"
+  InternetGateway:
+    Description: Internet Gateway Id
+    Value: !Ref InternetGateway
+    Export:
+      Name: !Sub "${Datacenter}:InternetGateway"
+  PublicRoute:
+    Description: Public Route to the IG
+    Value: !Ref PublicRouteTable
+    Export:
+      Name: !Sub "${Datacenter}:PublicRouteTable"
