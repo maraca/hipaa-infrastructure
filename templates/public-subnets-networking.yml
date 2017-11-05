@@ -1,0 +1,62 @@
+Description: >
+  Manages network routes
+
+Parameters:
+  Datacenter:
+    Description: Naming convention of the datacenter we are creating
+    Type: String
+
+Resources:
+  # Creates an Internet Gateway
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId:
+        Fn::ImportValue: !Sub "${Datacenter}:VpcId"
+      InternetGatewayId: !Ref InternetGateway
+
+  # Creates a Routing Table with a route out to the Internet
+  RouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Fn::ImportValue: !Sub ${Datacenter}:VpcId
+
+  PublicRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref RouteTable
+      DestinationCidrBlock: '0.0.0.0/0'
+      GatewayId: !Ref InternetGateway
+
+  # Maps Route Table to all 3 public AZs
+  RouteTableAssociationAZ1:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId:
+        Fn::ImportValue: !Sub "${Datacenter}:PublicSubnetAZ1"
+      RouteTableId: !Ref RouteTable
+
+  RouteTableAssociationAZ2:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId:
+        Fn::ImportValue: !Sub "${Datacenter}:PublicSubnetAZ2"
+      RouteTableId: !Ref RouteTable
+
+  RouteTableAssociationAZ3:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId:
+        Fn::ImportValue: !Sub "${Datacenter}:PublicSubnetAZ3"
+      RouteTableId: !Ref RouteTable
+
+Outputs:
+  InternetGateway:
+    Description: Internet Gateway Id
+    Value: !Ref InternetGateway
+    Export:
+      Name: !Sub "${Datacenter}:InternetGateway"

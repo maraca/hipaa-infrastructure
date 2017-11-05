@@ -16,3 +16,6 @@ stacks:
 
   - name: hipaa-public-subnets
     template_name: public-subnets
+
+  - name: hipaa-public-subnets-networking
+    template_name: public-subnets-networking
