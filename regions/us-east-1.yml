@@ -1,0 +1,8 @@
+defaults:
+  parameters:
+    CidrBlock: '10.10'
+    Datacenter: nva0
+
+stacks:
+  - name: hipaa-vpc
+    template_name: vpc

@@ -1,0 +1,30 @@
+Description: >
+  Creates an AWS VPC.
+
+Parameters:
+  CidrBlock:
+    Description: CIDR block associated with the VPC
+    Type: String
+  Datacenter:
+    Description: Naming convention of the datacenter we are creating
+    Type: String
+
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Sub
+        - '${Prefix}.0.0/16'
+        - { Prefix: !Ref CidrBlock }
+
+Outputs:
+  VpcId:
+    Description: VPC Id
+    Value: !Ref VPC
+    Export:
+      Name: !Sub "${Datacenter}:VpcId"
+  CidrBlock:
+    Description: CIDR block associated with the VPC
+    Value: !Ref CidrBlock
+    Export:
+      Name: !Sub "${Datacenter}:CidrBlock"
