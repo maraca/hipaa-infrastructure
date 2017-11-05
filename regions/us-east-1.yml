@@ -1,3 +1,4 @@
+---
 defaults:
   parameters:
     CidrBlockPrefix: '10.10'
@@ -69,3 +70,7 @@ stacks:
     template_name: nat
     parameters:
       SubnetId: '2'
+
+  # Docker images
+  - name: hipaa-ecr
+    template_name: ecr

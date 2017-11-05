@@ -1,0 +1,18 @@
+Description: >
+  Creates an ECR repository for Docker images
+
+Parameters:
+  Datacenter:
+    Description: Naming convention of the datacenter we are creating
+    Type: String
+
+Resources:
+  ECR:
+    Type: AWS::ECR::Repository
+
+Outputs:
+  ECR:
+    Description: Id of the repository created 
+    Value: !Ref ECR
+    Export:
+      Name: !Sub "${Datacenter}:ECR"
