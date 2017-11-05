@@ -51,6 +51,9 @@ stacks:
       AzId: '2'
       SubnetPrivacy: Private
 
+  - name: hipaa-private-subnets-acls
+    template_name: private-subnets-acls
+
   # Communication from Private Subnets to the Internet
   - name: hipaa-nat-az-0
     template_name: nat
