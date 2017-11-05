@@ -1,0 +1,30 @@
+Description: >
+    Creates a NAT instance in a given AZ
+
+Parameters:
+  Datacenter:
+    Description: Naming convention of the datacenter
+    Type: String
+  SubnetId:
+    Description:  Id of the Subnet to associate with this NAT instance
+    Type: String
+
+Resources:
+  EIP:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+
+  NATGateway:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt EIP.AllocationId
+      SubnetId:
+        Fn::ImportValue: !Sub ${Datacenter}:PublicSubnetAZ${SubnetId}
+
+Outputs:
+  NATGatewayId:
+    Description: Id of the NAT instance
+    Value: !Ref NATGateway
+    Export:
+      Name: !Sub ${Datacenter}:NATGatewayAZ${SubnetId}

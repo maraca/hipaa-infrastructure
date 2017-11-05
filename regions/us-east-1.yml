@@ -22,3 +22,18 @@ stacks:
 
   - name: hipaa-public-subnets-acls
     template_name: public-subnets-acls
+
+  - name: hipaa-nat-az-1
+    template_name: nat
+    parameters:
+      SubnetId: '1'
+
+  - name: hipaa-nat-az-2
+    template_name: nat
+    parameters:
+      SubnetId: '2'
+
+  - name: hipaa-nat-az-3
+    template_name: nat
+    parameters:
+      SubnetId: '3'
